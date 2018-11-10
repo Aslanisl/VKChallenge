@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">VK Challenge</string>
+
+    <string name="login_vk">Войти через Вконтакте</string>
+
+    <string name="time_in">%1$s в %2$s</string>
+    <string name="today">сегодня</string>
+    <string name="yesterday">вчера</string>
+</resources>

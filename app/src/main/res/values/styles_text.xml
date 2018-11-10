@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextView" />
+
+    <style name="TextView.Regular">
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="TextView.Medium">
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+</resources>
