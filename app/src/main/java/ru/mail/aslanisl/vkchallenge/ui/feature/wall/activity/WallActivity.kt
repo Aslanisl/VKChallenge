@@ -77,6 +77,7 @@ class WallActivity : BaseActivity() {
     }
 
     private fun initWallsData(data: UIData<List<VKWallModel>>) {
+        wallLoading.visibility = if (data.isLoading() && walls.isEmpty()) View.VISIBLE else View.GONE
         when {
             data.isError() -> toast(data.throwable?.message)
             data.isSuccess() -> initWalls(data.body)
