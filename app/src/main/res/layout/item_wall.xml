@@ -24,6 +24,7 @@
                 android:layout_width="@dimen/image_normal_width"
                 android:layout_height="@dimen/image_normal_height"
                 android:layout_margin="@dimen/spacing_small"
+                android:background="@drawable/bg_thumb"
                 tools:src="@drawable/ic_like_36" />
 
             <LinearLayout
@@ -59,6 +60,13 @@
             android:layout_height="match_parent"
             android:layout_below="@id/wallTopContainer"
             tools:src="@drawable/vk" />
+
+        <View
+            android:id="@+id/wallImageShadow"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/wall_image_shadow_height"
+            android:layout_alignTop="@id/wallImage"
+            android:background="@drawable/wall_image_shadow" />
 
         <LinearLayout
             android:layout_width="match_parent"

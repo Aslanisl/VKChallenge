@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/white</color>
-    <color name="colorPrimaryDark">@color/white</color>
-    <color name="colorAccent">@color/white</color>
+    <color name="colorPrimary">@color/lightGrey</color>
+    <color name="colorPrimaryDark">@color/lightGrey</color>
+    <color name="colorAccent">@color/lightGrey</color>
 
+    <color name="lightGrey">#F7F9FA</color>
     <color name="white">#ffffff</color>
     <color name="cornflowerBlue">#528bcc</color>
     <color name="darkSkyBlue">#2e7ae6</color>
@@ -14,4 +15,5 @@
     <color name="indicatorSelected">@color/white</color>
     <color name="indicatorUnselected">#3DFFFFFF</color>
     <color name="grey">#808080</color>
+    <color name="greyColor">#1F000000</color>
 </resources>

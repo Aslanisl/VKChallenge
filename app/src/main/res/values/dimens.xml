@@ -27,4 +27,6 @@
 
     <dimen name="wall_button_size">64dp</dimen>
 
+    <dimen name="wall_image_shadow_height">120dp</dimen>
+
 </resources>

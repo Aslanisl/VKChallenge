@@ -21,7 +21,7 @@ import ru.mail.aslanisl.vkchallenge.ui.feature.wall.manager.DateManager
 import ru.mail.aslanisl.vkchallenge.utils.GlideApp
 import kotlin.math.roundToInt
 
-private const val AUTO_OPEN_SPEED_LIMIT = 500
+private const val AUTO_OPEN_SPEED_LIMIT = 1000
 private const val MAX_ROTATION = 30
 private const val SCALE_FACTOR = 0.25
 private const val AUTO_CLOSE_FACTOR = 0.25
@@ -121,9 +121,11 @@ class WallView
         val firstPhoto = attachmentPhotos.getOrNull(0)
         if (firstPhoto.isNullOrEmpty().not()){
             wallImage.visibility = View.VISIBLE
+            wallImageShadow.visibility = View.VISIBLE
             GlideApp.with(wallImage).load(firstPhoto).into(wallImage)
         } else {
             wallImage.visibility = View.GONE
+            wallImageShadow.visibility = View.GONE
         }
 
         if (attachmentPhotos.size > 1){
@@ -177,6 +179,7 @@ class WallView
     }
 
     private fun showMore() {
+        dragEnable = false
         (wallBottomContainer.layoutParams as MarginLayoutParams).bottomMargin = bottomExpandMargin
         wallItem.scrollable = true
         clearEllipsize()
@@ -196,6 +199,7 @@ class WallView
     }
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
+        if (event.action == MotionEvent.ACTION_MOVE && dragEnable) return true
         return dragHelper.shouldInterceptTouchEvent(event)
     }
 
