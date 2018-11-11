@@ -2,23 +2,33 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/wallMainContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.feature.wall.activity.WallActivity">
 
+    <FrameLayout
+        android:id="@+id/wallContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/wall_container_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/bottomContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/spacing_normal"
+        android:layout_height="@dimen/wall_activity_buttons_height"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <FrameLayout
             android:id="@+id/wallClose"
-            android:layout_width="64dp"
-            android:layout_height="64dp">
+            android:layout_width="@dimen/wall_button_size"
+            android:layout_height="@dimen/wall_button_size"
+            android:background="@drawable/bg_wall_button"
+            android:elevation="2dp">
 
             <ImageView
                 android:layout_width="@dimen/image_normal_width"
@@ -29,8 +39,10 @@
 
         <FrameLayout
             android:id="@+id/wallLike"
-            android:layout_width="64dp"
-            android:layout_height="64dp">
+            android:layout_width="@dimen/wall_button_size"
+            android:layout_height="@dimen/wall_button_size"
+            android:layout_marginStart="@dimen/spacing_normal"
+            android:background="@drawable/shadow_184052">
 
             <ImageView
                 android:layout_width="@dimen/image_normal_width"
@@ -39,13 +51,6 @@
                 android:src="@drawable/ic_like_36" />
         </FrameLayout>
     </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/wallContainer"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomContainer"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/likeButton"

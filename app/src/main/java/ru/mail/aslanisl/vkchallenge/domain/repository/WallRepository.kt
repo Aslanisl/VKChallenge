@@ -28,6 +28,7 @@ class WallRepository @Inject constructor() {
             VKParameters.from(VKApiConst.EXTENDED, 1)
         )
         if (startFrom.isNullOrEmpty().not()) request.addExtraParameter("start_from", startFrom)
+        request.attempts = 0
         request.executeWithListener(object : VKRequest.VKRequestListener() {
             override fun onComplete(response: VKResponse?) {
                 super.onComplete(response)
@@ -38,10 +39,12 @@ class WallRepository @Inject constructor() {
                     if (sourceId > 0){
                         val profile = lastWallResponse?.profiles?.firstOrNull { it.id == wall.sourceId }
                         wall.profile = profile
+                        wall.ownerId = profile?.id ?: 0
                     } else {
                         val id = Math.abs(sourceId)
                         val group = lastWallResponse?.groups?.firstOrNull { it.id == id }
                         wall.group = group
+                        wall.ownerId = (group?.id ?: 0) * -1
                     }
                 }
                 wallLiveData.postValue(UIData.success(walls))
@@ -53,5 +56,23 @@ class WallRepository @Inject constructor() {
             }
         })
         return wallLiveData
+    }
+
+    fun likeWall(wall: VKWallModel){
+        val request = VKRequest(
+            "likes.add",
+            VKParameters.from("type", "post", "owner_id", wall.ownerId, "item_id", wall.postId)
+        )
+        request.attempts = 0
+        request.executeWithListener(null)
+    }
+
+    fun skipWall(wall: VKWallModel){
+        val request = VKRequest(
+            "newsfeed.ignoreItem",
+            VKParameters.from("type", "wall", "owner_id", wall.ownerId, "item_id", wall.postId)
+        )
+        request.attempts = 0
+        request.executeWithListener(null)
     }
 }

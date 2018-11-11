@@ -20,6 +20,7 @@ class VKWallModel {
         private set
     var profile: VKApiUser? = null
     var group: VKApiCommunity? = null
+    var ownerId: Int = 0
 
     fun parse(source: JSONObject?): VKWallModel {
         source ?: return this

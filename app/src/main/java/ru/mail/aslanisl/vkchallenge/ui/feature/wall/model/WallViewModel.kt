@@ -22,4 +22,14 @@ class WallViewModel
         }
         return wallLiveData
     }
+
+    fun likeWall(wall: VKWallModel?){
+        wall ?: return
+        wallRepository.likeWall(wall)
+    }
+
+    fun skipWall(wall: VKWallModel?){
+        wall ?: return
+        wallRepository.skipWall(wall)
+    }
 }

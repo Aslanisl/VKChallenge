@@ -3,7 +3,9 @@ package ru.mail.aslanisl.vkchallenge.ui.feature.wall.activity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.lifecycle.Observer
+import androidx.transition.TransitionManager
 import kotlinx.android.synthetic.main.activity_wall.*
 import ru.mail.aslanisl.vkchallenge.R
 import ru.mail.aslanisl.vkchallenge.data.base.UIData
@@ -32,6 +34,24 @@ class WallActivity : BaseActivity() {
     private val walls = mutableListOf<VKWallModel>()
     private var currentWallId: Int = 0
     private var currentWallPosition: Int = 0
+    private val currentWall: VKWallModel?
+        get() = walls.getOrNull(currentWallPosition)
+
+    private val wallContainerMargin by lazy {
+        resources.getDimensionPixelSize(R.dimen.wall_container_margin)
+    }
+    private val expandSet by lazy {
+        val set = ConstraintSet()
+        set.clone(wallMainContainer)
+        set.connect(wallContainer.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
+        set
+    }
+    private val collapseSet by lazy {
+        val set = ConstraintSet()
+        set.clone(wallMainContainer)
+        set.connect(wallContainer.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, wallContainerMargin)
+        set
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +66,14 @@ class WallActivity : BaseActivity() {
     }
 
     private fun initViews() {
-        wallClose.setOnClickListener { showNextWall() }
-        wallLike.setOnClickListener { showNextWall() }
+        wallClose.setOnClickListener {
+            viewModel.skipWall(currentWall)
+            showNextWall()
+        }
+        wallLike.setOnClickListener {
+            viewModel.likeWall(currentWall)
+            showNextWall()
+        }
     }
 
     private fun initWallsData(data: UIData<List<VKWallModel>>) {
@@ -62,12 +88,16 @@ class WallActivity : BaseActivity() {
         this.walls += walls
         // If no walls now. Show 2
         if (wallContainer.childCount == 0){
-            showNextWall()
-            showNextWall()
+            showNextWall(false)
+            showNextWall(false)
         }
     }
 
-    private fun showNextWall() {
+    private fun showNextWall(closeTop: Boolean = true) {
+        if (closeTop) {
+            val topView = wallContainer.getChildAt(wallContainer.childCount - 1) as? WallView
+            topView?.let { closeView(it) }
+        }
         val position = currentWallPosition
         val nextWall = walls.getOrNull(position)
         if (nextWall != null) {
@@ -104,13 +134,32 @@ class WallActivity : BaseActivity() {
             }
 
             override fun close(direction: DragDirection) {
-                wallContainer.removeView(wallView)
                 showNextWall()
-                likeButton.visibility = View.GONE
-                skipButton.visibility = View.GONE
+                if (direction == DragDirection.RIGHT) viewModel.likeWall(wall) else viewModel.skipWall(wall)
             }
         }
+        wallView.moreClickListener = {
+            wallView.dragEnable = false
+            expandContainer()
+        }
+
         enableDragForView()
+    }
+
+    private fun expandContainer() {
+        TransitionManager.beginDelayedTransition(wallMainContainer)
+        expandSet.applyTo(wallMainContainer)
+    }
+
+    private fun collapseContainer() {
+        collapseSet.applyTo(wallMainContainer)
+    }
+
+    private fun closeView(view: WallView){
+        collapseContainer()
+        wallContainer.removeView(view)
+        likeButton.visibility = View.GONE
+        skipButton.visibility = View.GONE
     }
 
     // Sometimes view under top view handle drag

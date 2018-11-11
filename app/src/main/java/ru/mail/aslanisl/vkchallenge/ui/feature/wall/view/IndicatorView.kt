@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.AttrRes
-import androidx.core.content.ContextCompat
 import ru.mail.aslanisl.vkchallenge.R
 
 class IndicatorView
@@ -19,10 +18,10 @@ class IndicatorView
 
     private val indicatorHeight by lazy {
         context.resources.getDimensionPixelSize(R.dimen.indicator_height)
-
     }
     private val indicatorSpacing by lazy {
-        context.resources.getDimensionPixelSize(R.dimen.indicator_spacing) }
+        context.resources.getDimensionPixelSize(R.dimen.indicator_spacing)
+    }
 
     private var selectedPosition = 0
 
