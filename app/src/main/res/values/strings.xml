@@ -6,4 +6,7 @@
     <string name="time_in">%1$s в %2$s</string>
     <string name="today">сегодня</string>
     <string name="yesterday">вчера</string>
+
+    <string name="i_like">Мне нравится</string>
+    <string name="skip">Пропустить</string>
 </resources>

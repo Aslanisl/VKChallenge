@@ -10,6 +10,7 @@ import android.widget.FrameLayout
 import androidx.annotation.AttrRes
 import androidx.core.view.ViewCompat
 import androidx.customview.widget.ViewDragHelper
+import androidx.customview.widget.ViewDragHelper.STATE_SETTLING
 import com.vk.sdk.api.model.VKApiPhoto
 import kotlinx.android.synthetic.main.item_wall.view.*
 import ru.mail.aslanisl.vkchallenge.R
@@ -18,7 +19,7 @@ import ru.mail.aslanisl.vkchallenge.ui.feature.wall.manager.DateManager
 import ru.mail.aslanisl.vkchallenge.utils.GlideApp
 import kotlin.math.roundToInt
 
-private const val AUTO_OPEN_SPEED_LIMIT = 300
+private const val AUTO_OPEN_SPEED_LIMIT = 500
 private const val MAX_ROTATION = 30
 private const val SCALE_FACTOR = 0.25
 private const val AUTO_CLOSE_FACTOR = 0.25
@@ -34,10 +35,11 @@ class WallView
     private val dragHelper: ViewDragHelper
 
     private var draggingBorder = 0
-    private var draggingState  = 0
+    private var draggingState = 0
     private var preventPositionReset = true
 
-    var closeViewListener: (() -> Unit)? = null
+    var wallDragListener: WallDragListener? = null
+
     private var viewClosed = false
 
     var dragEnable = true
@@ -56,6 +58,7 @@ class WallView
     }
 
     fun initWall(wallModel: VKWallModel) {
+        wallItem.visibility = View.VISIBLE
         wallUserDate.text = DateManager.formatDateStamp(wallModel.date)
         val thumb = if (wallModel.profile != null) {
             wallModel.profile?.photo?.getImageForDimension(thumbWidth, thumbHeight)
@@ -76,6 +79,7 @@ class WallView
         }
         wallUserName.text = name
 
+        indicatorView.setItemCount(wallModel.attachments.size)
         val firstPhoto = wallModel.attachments.firstOrNull { it is VKApiPhoto }
         if (firstPhoto is VKApiPhoto) {
             val photo = firstPhoto.src[firstPhoto.src.size - 1]
@@ -118,9 +122,7 @@ class WallView
 
         override fun getViewVerticalDragRange(child: View) = verticalRange
 
-        override fun clampViewPositionHorizontal(child: View, left: Int, dx: Int): Int {
-            return left
-        }
+        override fun clampViewPositionHorizontal(child: View, left: Int, dx: Int) = left
 
         override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
             val rangeToCheck = verticalRange
@@ -137,12 +139,20 @@ class WallView
 
             val settleDestX = if (settleToOpen) verticalRange else 0
 
+            wallDragListener?.stopDrag(
+                if (draggingBorder > 0) DragDirection.RIGHT else DragDirection.LEFT,
+                settleToOpen
+            )
+
             if (dragHelper.settleCapturedViewAt(settleDestX * direction, 0)) {
                 ViewCompat.postInvalidateOnAnimation(this@WallView)
             }
         }
 
         override fun onViewPositionChanged(changedView: View, left: Int, top: Int, dx: Int, dy: Int) {
+            if (draggingState != STATE_SETTLING){
+                wallDragListener?.startDrag(if (left > 0) DragDirection.RIGHT else DragDirection.LEFT)
+            }
             draggingBorder = left
             val diff = left / verticalRange.toFloat()
             changedView.rotation = diff * MAX_ROTATION
@@ -150,10 +160,10 @@ class WallView
             changedView.scaleX = scale
             changedView.scaleY = scale
 
-            if (Math.abs(diff) >= 1 && viewClosed.not()){
+            if (Math.abs(diff) >= 1 && viewClosed.not()) {
                 viewClosed = true
+                wallDragListener?.close(if (left > 0) DragDirection.RIGHT else DragDirection.LEFT)
                 dragHelper.abort()
-                closeViewListener?.invoke()
             }
         }
 

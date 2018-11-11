@@ -46,4 +46,49 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomContainer"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/likeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_large"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:background="@drawable/bg_button_like_elevation16"
+        android:rotation="-4"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
+
+        <TextView
+            style="@style/WallButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/i_like" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/skipButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:layout_marginEnd="@dimen/spacing_large"
+        android:background="@drawable/bg_button_skip_elevation16"
+        android:rotation="4"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
+
+        <TextView
+            style="@style/WallButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/skip" />
+    </FrameLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

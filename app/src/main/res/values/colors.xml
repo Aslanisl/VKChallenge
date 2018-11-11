@@ -10,4 +10,7 @@
     <color name="darkBlue">#085fda</color>
     <color name="darkSkyBlueTwo">#4da5e2</color>
     <color name="reddishPink">#ff3355</color>
+
+    <color name="indicatorSelected">@color/white</color>
+    <color name="indicatorUnselected">#3DFFFFFF</color>
 </resources>

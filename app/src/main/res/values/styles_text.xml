@@ -11,4 +11,15 @@
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
+    <style name="WallButton" parent="TextView.Medium">
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_big</item>
+        <item name="android:layout_marginStart">@dimen/spacing_normal</item>
+        <item name="android:layout_marginEnd">@dimen/spacing_normal</item>
+        <item name="android:layout_marginTop">@dimen/spacing_small</item>
+        <item name="android:layout_marginBottom">@dimen/spacing_small</item>
+    </style>
+
 </resources>

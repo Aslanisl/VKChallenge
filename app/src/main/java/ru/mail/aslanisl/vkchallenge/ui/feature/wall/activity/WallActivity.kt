@@ -1,6 +1,7 @@
 package ru.mail.aslanisl.vkchallenge.ui.feature.wall.activity
 
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_wall.*
@@ -8,11 +9,12 @@ import ru.mail.aslanisl.vkchallenge.R
 import ru.mail.aslanisl.vkchallenge.data.base.UIData
 import ru.mail.aslanisl.vkchallenge.data.model.VKWallModel
 import ru.mail.aslanisl.vkchallenge.domain.di.component.AppComponent
-import ru.mail.aslanisl.vkchallenge.extensions.forChildEach
 import ru.mail.aslanisl.vkchallenge.extensions.forChildEachReverse
 import ru.mail.aslanisl.vkchallenge.extensions.toast
 import ru.mail.aslanisl.vkchallenge.ui.base.activity.BaseActivity
 import ru.mail.aslanisl.vkchallenge.ui.feature.wall.model.WallViewModel
+import ru.mail.aslanisl.vkchallenge.ui.feature.wall.view.DragDirection
+import ru.mail.aslanisl.vkchallenge.ui.feature.wall.view.WallDragListener
 import ru.mail.aslanisl.vkchallenge.ui.feature.wall.view.WallView
 
 class WallActivity : BaseActivity() {
@@ -36,7 +38,6 @@ class WallActivity : BaseActivity() {
         setContentView(R.layout.activity_wall)
 
         loadWalls()
-
         initViews()
     }
 
@@ -91,9 +92,23 @@ class WallActivity : BaseActivity() {
         wallView.initWall(wall)
         wallContainer.addView(wallView, 0)
         currentWallId = wall.postId
-        wallView.closeViewListener = {
-            wallContainer.removeView(wallView)
-            showNextWall()
+        wallView.wallDragListener = object : WallDragListener {
+            override fun startDrag(direction: DragDirection) {
+                likeButton.visibility = if (direction == DragDirection.LEFT) View.GONE else View.VISIBLE
+                skipButton.visibility = if (direction == DragDirection.RIGHT) View.GONE else View.VISIBLE
+            }
+
+            override fun stopDrag(direction: DragDirection, closing: Boolean) {
+                likeButton.visibility = View.GONE
+                skipButton.visibility = View.GONE
+            }
+
+            override fun close(direction: DragDirection) {
+                wallContainer.removeView(wallView)
+                showNextWall()
+                likeButton.visibility = View.GONE
+                skipButton.visibility = View.GONE
+            }
         }
         enableDragForView()
     }
